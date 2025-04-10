@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-
+# cli/interface.py
 import os
 import argparse
 import torch
@@ -68,20 +68,26 @@ def run_tts(args):
 
     # Ensure the save directory exists
     os.makedirs(args.save_dir, exist_ok=True)
-
+    print(platform.system(), args.device)
+    device = torch.device("cpu")
     # Convert device argument to torch.device
-    if platform.system() == "Darwin" and torch.backends.mps.is_available():
-        # macOS with MPS support (Apple Silicon)
-        device = torch.device(f"mps:{args.device}")
-        logging.info(f"Using MPS device: {device}")
-    elif torch.cuda.is_available():
-        # System with CUDA support
-        device = torch.device(f"cuda:{args.device}")
-        logging.info(f"Using CUDA device: {device}")
-    else:
-        # Fall back to CPU
-        device = torch.device("cpu")
-        logging.info("GPU acceleration not available, using CPU")
+    # if platform.system() == "Darwin" and torch.backends.mps.is_available():
+    #     # macOS with MPS support (Apple Silicon)
+    #     device = torch.device(f"mps:{args.device}")
+    #     logging.info(f"Using MPS device: {device}")
+    # elif torch.cuda.is_available():
+    #     # # System with CUDA support
+    #     # device = torch.device(f"cuda:{args.device}")
+    #     # logging.info(f"Using CUDA device: {device}")
+    #     if args.device == -1:
+    #         device = torch.device("cpu")
+    #     else:
+    #         device = torch.device(f"cuda:{args.device}")
+
+    # else:
+    #     # Fall back to CPU
+    #     device = torch.device("cpu")
+    #     logging.info("GPU acceleration not available, using CPU")
 
     # Initialize the model
     model = SparkTTS(args.model_dir, device)
@@ -91,7 +97,7 @@ def run_tts(args):
     save_path = os.path.join(args.save_dir, f"{timestamp}.wav")
 
     logging.info("Starting inference...")
-
+    print(args.prompt_text, args.gender, args.pitch)
     # Perform inference and save the output audio
     with torch.no_grad():
         wav = model.inference(

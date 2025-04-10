@@ -228,7 +228,7 @@ if __name__ == "__main__":
     model = BiCodec.load_from_checkpoint(
         model_dir="pretrained_models/SparkTTS-0.5B/BiCodec",
     )
-
+    print("here testing")
     # Generate random inputs for testing
     duration = 0.96
     x = torch.randn(20, 1, int(duration * 16000))

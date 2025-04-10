@@ -29,7 +29,6 @@ from sparktts.utils.token_parser import LEVELS_MAP_UI
 def initialize_model(model_dir="pretrained_models/Spark-TTS-0.5B", device=0):
     """Load the model once at the beginning."""
     logging.info(f"Loading model from: {model_dir}")
-
     # Determine appropriate device based on platform and availability
     if platform.system() == "Darwin":
         # macOS with MPS support (Apple Silicon)

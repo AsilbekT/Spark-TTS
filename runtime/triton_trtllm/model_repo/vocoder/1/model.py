@@ -81,6 +81,7 @@ class TritonPythonModel:
         global_tokens_list, semantic_tokens_list = [], []
 
         # Process each request in batch
+        print(f"Received {(requests)} requests")
         for request in requests:
             global_tokens_tensor = pb_utils.get_input_tensor_by_name(request, "global_tokens").as_numpy()
             semantic_tokens_tensor = pb_utils.get_input_tensor_by_name(request, "semantic_tokens").as_numpy()

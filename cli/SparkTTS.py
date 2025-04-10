@@ -12,6 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
+# cli/SparkTTS.py
 
 import re
 import torch
@@ -24,7 +25,7 @@ from sparktts.models.audio_tokenizer import BiCodecTokenizer
 from sparktts.utils.token_parser import LEVELS_MAP, GENDER_MAP, TASK_TOKEN_MAP
 
 
-class SparkTTS:
+class  SparkTTS:
     """
     Spark-TTS for text-to-speech generation.
     """
@@ -163,7 +164,7 @@ class SparkTTS:
         gender: str = None,
         pitch: str = None,
         speed: str = None,
-        temperature: float = 0.8,
+        temperature: float = 0,
         top_k: float = 50,
         top_p: float = 0.95,
     ) -> torch.Tensor:
@@ -186,18 +187,20 @@ class SparkTTS:
         """
         if gender is not None:
             prompt = self.process_prompt_control(gender, pitch, speed, text)
+        
 
         else:
             prompt, global_token_ids = self.process_prompt(
                 text, prompt_speech_path, prompt_text
             )
+        print(f"Prompt: {prompt}")
         model_inputs = self.tokenizer([prompt], return_tensors="pt").to(self.device)
-
+        
         # Generate speech using the model
         generated_ids = self.model.generate(
             **model_inputs,
             max_new_tokens=3000,
-            do_sample=True,
+            do_sample=False,
             top_k=top_k,
             top_p=top_p,
             temperature=temperature,
@@ -208,10 +211,9 @@ class SparkTTS:
             output_ids[len(input_ids) :]
             for input_ids, output_ids in zip(model_inputs.input_ids, generated_ids)
         ]
-
         # Decode the generated tokens into text
         predicts = self.tokenizer.batch_decode(generated_ids, skip_special_tokens=True)[0]
-
+        print(f"Generated text: {predicts}")
         # Extract semantic token IDs from the generated text
         pred_semantic_ids = (
             torch.tensor([int(token) for token in re.findall(r"bicodec_semantic_(\d+)", predicts)])
@@ -232,5 +234,5 @@ class SparkTTS:
             global_token_ids.to(self.device).squeeze(0),
             pred_semantic_ids.to(self.device),
         )
-
+        print(f"Generated waveform: {wav}")
         return wav

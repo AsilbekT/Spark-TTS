@@ -12,7 +12,7 @@
 # WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
 # See the License for the specific language governing permissions and
 # limitations under the License.
-
+# sparkttts/models/audio_tokenizer.py
 
 import torch
 import numpy as np
@@ -151,6 +151,7 @@ if __name__ == "__main__":
     import soundfile as sf
 
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
+    print(f"Using device: {device}")
     tokenizer = BiCodecTokenizer(
         model_dir="pretrained_models/Spark-TTS-0.5B",
         device=device,

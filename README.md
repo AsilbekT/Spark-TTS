@@ -32,14 +32,28 @@ This repository enhances Spark-TTS by introducing a **semantic memory caching sy
 ## 🧪 How It Works
 
 ```plaintext
-User Input Text
-    ↓
-Segment Text into Sentences
-    ↓
-For each segment:
-    → Check FAISS for semantic match
-    → If found: Return cached audio
-    → If not: Generate audio using Spark-TTS and cache it
+📥 User Input Text
+   ↓
+🪄 Text Segmentation
+   - Uses NLTK to break the input into logical sentences or chunks.
+   ↓
+🔍 For Each Segment:
+   → [1] Generate BERT Embedding (768-dim)
+   → [2] Search Similar Embedding in FAISS
+       ↳ If match found (distance < 0.1): ✅ Use Cached Audio
+       ↳ If no match: ❌ Generate New Audio via Spark-TTS
+                          ↓
+                     🎙️ Save Audio + Text to:
+                          - Redis (text, audio path, timestamp)
+                          - FAISS (embedding)
+                          - Index Map (session ID)
+   ↓
+🖨️ Log Result
+   - Printed logs indicate which segments were cached or generated
+   ↓
+🔊 Output
+   - Last audio segment is returned for playback in UI
+
 ```
 
 Each segment is checked individually, and processed accordingly, with logs printing:

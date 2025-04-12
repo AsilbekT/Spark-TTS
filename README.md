@@ -7,6 +7,13 @@
 </div>
 
 ---
+## 📝 Project Info
+
+- **Course**: Machine Learning Programming (AIDI 1002)
+- **Project Title**: Real-Time Text-to-Speech with Intelligent Caching using Spark-TTS + FAISS
+- **Team Members**:
+  - Asilbek Turgunboev
+  - Monica Priya
 
 ## ✨ Project Summary
 

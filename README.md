@@ -1,4 +1,4 @@
-<div align="center">
+<div>
     <h1>📣 Real-Time TTS with Memory Caching</h1>
     <p>
         A practical extension and demonstration of the <b><em>Spark-TTS</em></b> system.<br>
